@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>underscore-examples</title>
+
+    <script type="text/javascript" src="/apps/2.0rc2/sdk.js"></script>
+
+    <script type="text/javascript">
+        Rally.onReady(function () {
+                Ext.define("CustomApp",{extend:"Rally.app.App",componentCls:"app",items:{html:'<a href="https://help.rallydev.com/apps/2.0rc2/doc/">App SDK 2.0rc2 Docs</a>'},launch:function(){var us=Ext.create("UnderscoreExamples",{});console.log(us.filter())}});
+                Ext.define("UnderscoreExamples",function(){var self;return{config:{},constructor:function(config){return self=this,this.initConfig(config),this},filter:function(){var arr=[{name:"joe",age:32},{name:"mary",age:21},{name:"barry",age:37}],oldies=_.filter(arr,function(e){return e.age>30})},groupBy:function(){var snaps=[{state:"open",planestimate:12},{state:"open",planestimate:5},{state:"closed",planestimate:3}];return groupedByState=_.groupBy(snaps,function(s){return s.state})},keys:function(){var keys=_.keys(self.groupBy());return keys},each:function(){_.each(self.keys(),function(k,i){console.log(k,i)})},sortBy:function(){var arr=[[1,2,3],[1,2],[1]],s=_.sortBy(arr,"length")},values:function(){var values=_.values(self.groupBy());return values},last:function(){var l=_.map(self.values(),function(v){return _.last(_.sortBy(v,"planestimate"))});return l},map:function(){},compact:function(){},reduce:function(){var values=self.values(),summary=_.map(values,function(value){return{state:value[0].state,total:_.reduce(value,function(v,memo){return memo+v.planestimate},0)}});return summary},find:function(){},min:function(){var start=_.min(_.pluck(releases,function(r){return r.get("ReleaseStartDate")}))},max:function(){var end=_.max(_.pluck(releases,function(r){return r.get("ReleaseDate")}))},pluck:function(){},uniq:function(){},indexOf:function(){},isObject:function(){},isNull:function(){},isUndefined:function(){}}});
+
+            Rally.launchApp('CustomApp', {
+                name:"underscore-examples",
+	            parentRepos:""
+            });
+
+        });
+    </script>
+
+
+    <style type="text/css">
+        .app {
+     /* Add app styles here */
+}
+
+    </style>
+</head>
+<body></body>
+</html>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>underscore-examples</title>
+
+    <script type="text/javascript" src="/apps/2.0rc2/sdk.js"></script>
+
+    <script type="text/javascript">
+        Rally.onReady(function () {
+                Ext.define('CustomApp', {
+    extend: 'Rally.app.App',
+    componentCls: 'app',
+    items:{ html:'<a href="https://help.rallydev.com/apps/2.0rc2/doc/">App SDK 2.0rc2 Docs</a>'},
+    launch: function() {
+        //Write app code here
+        var us = Ext.create("UnderscoreExamples",{});
+
+        console.log(us.filter());
+    }
+});
+
+                Ext.define("UnderscoreExamples", function() {
+
+    var self;
+
+    return {
+
+        config : {
+        },
+
+        constructor:function(config) {
+            self = this;
+            this.initConfig(config);
+            return this;
+        },
+
+        filter : function() {
+
+            var arr = [{name:"joe",age:32},{name:"mary",age:21},{name:"barry",age:37}];
+
+            var oldies = _.filter( arr, function(e) {
+                return e.age > 30;
+            });
+
+            // [{name:"joe",age:32},{name:"barry",age:37}
+
+        },
+
+        groupBy : function() {
+
+            var snaps = [{state:"open",planestimate:12},{state:"open",planestimate:5},{state:"closed",planestimate:3}];
+
+            groupedByState = _.groupBy(snaps, function(s) { return s.state;});
+
+            /*
+            {
+                open : [{state:"open",planestimate:12},{state:"open",planestimate:5}],
+                closed : [{state:"closed",planestimate:3]
+            }
+            */
+
+            return groupedByState;
+
+        },
+
+        keys : function() {
+
+            var keys = _.keys( self.groupBy () );
+
+            // ["open","closed"]
+
+            return keys;
+
+        },
+
+        each : function() {
+
+            _.each( self.keys(), function(k,i) {
+                console.log(k,i);
+            });
+
+            /*
+            "open", 0
+            "closed", 1
+            */
+        },
+
+        sortBy : function() {
+
+            var arr = [ [1,2,3], [1,2], [1] ];
+            var s = _.sortBy(arr,"length");
+            // [ [1], [1,2], [1,2,3] ];
+
+        },
+
+        values : function() {
+
+            var values = _.values( self.groupBy() );
+
+            /*
+            [ [{state:"open",planestimate:12},{state:"open",planestimate:5}],
+              [{state:"closed",planestimate:3] ]
+            */
+
+            return values;
+
+        },
+
+        last : function() {
+
+            var l = _.map( self.values(), function (v) {
+                return _.last( _.sortBy( v, "planestimate" ));
+            });
+            // [{state:"open",planestimate:12},{state:"closed",planestimate:3}]
+            return l;
+
+        },
+
+        map : function() {
+
+        },
+
+        compact : function() {
+
+        },
+
+        reduce : function() {
+
+            var values = self.values();
+
+            /*
+             [ [{state:"open",planestimate:12},{state:"open",planestimate:5}],
+             [{state:"closed",planestimate:3] ]
+             */
+
+            var summary = _.map( values , function(value) {
+                return { state : value[0].state,
+                    total : _.reduce( value, function( v, memo ) {
+                        return memo + v.planestimate;
+                    } ,0 )
+                };
+            } );
+
+            // [ { state : "open", total : 17 },
+            //   { state : "closed", total : 3 } ]
+            return summary;
+
+        },
+
+        find : function() {
+
+        },
+
+        min : function() {
+            var start = _.min(_.pluck(releases,function(r) { return r.get("ReleaseStartDate");}));
+        },
+
+        max : function() {
+            var end   = _.max(_.pluck(releases,function(r) { return r.get("ReleaseDate");}));
+        },
+
+        pluck : function() {
+
+        },
+
+        uniq : function() {
+
+        },
+
+        indexOf : function() {
+
+        },
+
+        isObject : function() {
+
+        },
+
+        isNull : function() {
+
+        },
+
+        isUndefined : function() {
+
+        }
+
+    }
+});
+
+
+            Rally.launchApp('CustomApp', {
+                name:"underscore-examples",
+	            parentRepos:""
+            });
+
+        });
+    </script>
+
+
+    <style type="text/css">
+        .app {
+     /* Add app styles here */
+}
+
+    </style>
+</head>
+<body></body>
+</html>
