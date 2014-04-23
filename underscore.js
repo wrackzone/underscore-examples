@@ -5,10 +5,20 @@ Ext.define("UnderscoreExamples", function() {
     return {
 
         config : {
+
         },
 
-        constructor:function(config) {
+        snapshots : [
 
+            {state:"open"  , planestimate:12 },
+            {state:"open"  , planestimate:5  },
+            {state:"closed", planestimate:3  },
+            {state:"closed", planestimate:1  }
+
+        ],
+
+        constructor:function(config) {
+            
             self = this;
             this.initConfig(config);
             return this;
@@ -17,33 +27,32 @@ Ext.define("UnderscoreExamples", function() {
 
         each : function() {
 
-            _.each( self.keys(), function(k,i) {
-                console.log(k,i);
+            _.each( self.snapshots, function(s,i) {
+                console.log(i,s.state);
             });
 
-            /*
-             "open", 0
-             "closed", 1
-             */
         },
 
         filter : function() {
 
-            var snaps = [{state:"open",planestimate:12},{state:"open",planestimate:5},{state:"closed",planestimate:3}];
-
-            var open = _.filter( snaps, function(e) {
-                return e.state ==="open";
+            var open = _.filter( self.snapshots , function(s) {
+                return s.state === "open";
             });
+            return open;
 
-            return oldies;
+        },
+
+        filterFunction : function(f) {
+
+            var filtered = _.filter( self.snapshots , f );
+            return filtered;
 
         },
 
         groupBy : function() {
 
-            var snaps = [{state:"open",planestimate:12},{state:"open",planestimate:5},{state:"closed",planestimate:3}];
-
-            groupedByState = _.groupBy(snaps, function(s) { return s.state;});
+            groupedByState = _.groupBy(self.snapshots, function(s) { return s.state; } );
+            // groupedByState = _.groupBy(self.snapshots, "state" } );
 
             /*
             {
@@ -58,7 +67,7 @@ Ext.define("UnderscoreExamples", function() {
 
         keys : function() {
 
-            var keys = _.keys( self.groupBy () );
+            var keys = _.keys( self.groupBy() );
 
             // ["open","closed"]
 
@@ -79,17 +88,44 @@ Ext.define("UnderscoreExamples", function() {
 
         },
 
+        reduce : function() {
 
-        sortBy : function() {
+            var grouped = self.groupBy();
 
-            var arr = [ [1,2,3], [1,2], [1] ];
-            var s = _.sortBy(arr,"length");
-            // [ [1], [1,2], [1,2,3] ];
-            return s;
+            var keys = _.keys(grouped); // [ "open","closed" ]
+
+            var summary = _.map( keys , function(key) {
+
+                var value = grouped[key]; // eg. [{state:"open",planestimate:12},{state:"open",planestimate:5}]
+
+                return { state : key,
+                    total : _.reduce( value, function( memo , v ) {
+                        return memo + v.planestimate;
+                    } , 0 )
+                };
+
+            } );
+
+            // [ { state : "open", total : 17 },
+            //   { state : "closed", total : 3 } ]
+            return summary;
 
         },
 
+        sortBy : function() {
 
+            var arr = [ [1,2,3], [1,2], [1], [12] ];
+            var s = _.sortBy(arr,"length");
+            // [ [1], [1,2], [1,2,3] ];
+
+
+            var s = _.sortBy(arr,function(e) {
+                return _.reduce( e, function( memo, v) { return memo + v }, 0);
+            });
+
+            return s;
+
+        },
 
         last : function() {
 
@@ -109,28 +145,6 @@ Ext.define("UnderscoreExamples", function() {
 
         },
 
-        reduce : function() {
-
-            var values = self.values();
-
-            /*
-             [ [{state:"open",planestimate:12},{state:"open",planestimate:5}],
-             [{state:"closed",planestimate:3] ]
-             */
-
-            var summary = _.map( values , function(value) {
-                return { state : value[0].state,
-                    total : _.reduce( value, function( v, memo ) {
-                        return memo + v.planestimate;
-                    } ,0 )
-                };
-            } );
-
-            // [ { state : "open", total : 17 },
-            //   { state : "closed", total : 3 } ]
-            return summary;
-
-        },
 
         find : function() {
 

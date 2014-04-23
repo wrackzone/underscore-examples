@@ -6,18 +6,35 @@ Ext.define('CustomApp', {
         //Write app code here
         var us = Ext.create("UnderscoreExamples",{});
 
+        console.log("each");
+        us.each();
+
+        var openFilter = function(s) {
+            return s.state === "open";
+        };
+
+        var closedFilter = function(s) {
+            return s.state === "closed";
+        }
+
         console.log("filter");
         console.log(us.filter());
+
+        console.log("filterOpen");
+        console.log(us.filterFunction( openFilter ));
+
+        console.log("filterClosed");
+        console.log(us.filterFunction( closedFilter ));
 
 
         console.log("groupBy");
         console.log(us.groupBy());
 
+        console.log("reduce");
+        console.log(us.reduce());
+
         console.log("keys");
         console.log(us.keys());
-
-        console.log("each");
-        us.each();
 
         console.log("sortBy");
         console.log(us.sortBy());
@@ -34,8 +51,6 @@ Ext.define('CustomApp', {
         console.log("compact");
         console.log(us.compact());
 
-        console.log("reduce");
-        console.log(us.reduce());
 
 
 
