@@ -4,26 +4,26 @@ Ext.define("UnderscoreExamples", function() {
 
     return {
 
+        constructor:function(config) {
+
+            self = this;
+            this.initConfig(config);
+            return this;
+
+        },
+
         config : {
 
         },
 
         snapshots : [
 
-            {state:"open"  , planestimate:12 },
-            {state:"open"  , planestimate:5  },
-            {state:"closed", planestimate:3  },
-            {state:"closed", planestimate:1  }
+            { state: "open"  , planestimate:12 },
+            { state: "open"  , planestimate:5  },
+            { state: "closed", planestimate:3  },
+            { state: "closed", planestimate:1  }
 
         ],
-
-        constructor:function(config) {
-            
-            self = this;
-            this.initConfig(config);
-            return this;
-
-        },
 
         each : function() {
 
@@ -40,6 +40,10 @@ Ext.define("UnderscoreExamples", function() {
             });
             return open;
 
+            // { state:"open"  , planestimate:12 },
+            // { state:"open"  , planestimate:5  },
+
+
         },
 
         filterFunction : function(f) {
@@ -51,17 +55,14 @@ Ext.define("UnderscoreExamples", function() {
 
         groupBy : function() {
 
-            groupedByState = _.groupBy(self.snapshots, function(s) { return s.state; } );
-            // groupedByState = _.groupBy(self.snapshots, "state" } );
-
-            /*
-            {
-                open : [{state:"open",planestimate:12},{state:"open",planestimate:5}],
-                closed : [{state:"closed",planestimate:3]
-            }
-            */
+            var groupedByState = _.groupBy(self.snapshots, function(s) { return s.state; } );
 
             return groupedByState;
+
+            // {
+            //     "open" : [{ state:"open"  , planestimate:12 }, { state:"open", planestimate:5}],
+            //     "closed" : [ { state:"closed", planestimate:3 }, { state:"closed", planestimate:1 } ]
+            // }
 
         },
 
@@ -69,9 +70,17 @@ Ext.define("UnderscoreExamples", function() {
 
             var keys = _.keys( self.groupBy() );
 
+            return keys;
+
             // ["open","closed"]
 
-            return keys;
+        },
+
+        uniq : function() {
+
+            return _.uniq( _.pluck(snapshots,"state"));
+
+            // ["open","closed"]
 
         },
 
@@ -80,8 +89,10 @@ Ext.define("UnderscoreExamples", function() {
             var values = _.values( self.groupBy() );
 
             /*
-             [ [{state:"open",planestimate:12},{state:"open",planestimate:5}],
-             [{state:"closed",planestimate:3] ]
+            [ 
+                [{state:"open",planestimate:12},{state:"open",planestimate:5}],
+                [{state:"closed",planestimate:3] 
+            ]
              */
 
             return values;
@@ -137,6 +148,15 @@ Ext.define("UnderscoreExamples", function() {
 
         },
 
+        min : function() {
+            var start = _.min(_.pluck(releases,function(r) { return r.get("ReleaseStartDate");}));
+        },
+
+        max : function() {
+            var end   = _.max(_.pluck(releases,function(r) { return r.get("ReleaseDate");}));
+        },
+
+
         map : function() {
 
         },
@@ -150,19 +170,8 @@ Ext.define("UnderscoreExamples", function() {
 
         },
 
-        min : function() {
-            var start = _.min(_.pluck(releases,function(r) { return r.get("ReleaseStartDate");}));
-        },
-
-        max : function() {
-            var end   = _.max(_.pluck(releases,function(r) { return r.get("ReleaseDate");}));
-        },
 
         pluck : function() {
-
-        },
-
-        uniq : function() {
 
         },
 

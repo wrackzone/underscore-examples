@@ -3,6 +3,42 @@ Ext.define('CustomApp', {
     componentCls: 'app',
     items:{ html:'<a href="https://help.rallydev.com/apps/2.0rc2/doc/">App SDK 2.0rc2 Docs</a>'},
     launch: function() {
+
+        var config = {
+            "1" : ["A","B"],
+            "2" : ["C","D"]
+        };
+
+        var objs = [ { name : "A", tags : ["A","B","C"]},
+            { name : "B", tags : ["A"]},
+            { name : "C", tags : ["C"]},
+            { name : "D", tags : ["D"]}
+        ] ;
+
+        var buckets = _.map(_.keys(config), function(k) {
+
+            var searchFor = config[k];
+
+            var results = _.filter( objs, function(obj) {
+                return _.intersection(obj.tags,searchFor).length >0;
+            })
+
+            return {
+                bucket : k,
+                results : results
+            };
+
+        });
+
+        console.log("buckets",buckets);
+
+        var g = _.groupBy(objs,function(o) {
+            return o.tags;
+        });
+
+        console.log("g",g);
+
+
         //Write app code here
         var us = Ext.create("UnderscoreExamples",{});
 
